@@ -1,6 +1,9 @@
 import express = require("express")
+import cors from "cors"
 
 const app = express()
+
+app.use(cors())
 
 const ANSWERS = [
   "It is certain.",
