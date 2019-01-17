@@ -1,0 +1,24 @@
+{
+  "name": "magic-8-ball",
+  "version": "1.0.0",
+  "description": "To run",
+  "main": "index.js",
+  "scripts": {
+    "setup": "cd client && npm install && cd ../server && npm install",
+    "start": "concurrently \"cd client && npm start\" \"cd server && npm start\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lioneltay/magic-8-ball.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lioneltay/magic-8-ball/issues"
+  },
+  "homepage": "https://github.com/lioneltay/magic-8-ball#readme",
+  "devDependencies": {
+    "concurrently": "^4.1.0"
+  }
+}

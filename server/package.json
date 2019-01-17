@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "ts-node index.ts"
+    "start": "nodemon index.ts"
   },
   "keywords": [],
   "author": "",
@@ -17,6 +17,7 @@
   },
   "devDependencies": {
     "@types/cors": "^2.8.4",
+    "nodemon": "^1.18.9",
     "typescript": "^3.2.2"
   }
 }
