@@ -4,7 +4,7 @@
   "description": "To run",
   "main": "index.js",
   "scripts": {
-    "setup": "cd client && npm install && cd ../server && npm install",
+    "setup": "npm install && cd client && npm install && cd ../server && npm install",
     "start": "concurrently \"cd client && npm start\" \"cd server && npm start\""
   },
   "repository": {
