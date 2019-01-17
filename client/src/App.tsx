@@ -1,6 +1,11 @@
 import React from "react"
-import styled from "styled-components"
+import styled, { keyframes, css } from "styled-components"
+import { Spring } from "react-spring"
 import { getAnswer } from "./api"
+
+function wait(ms: number): Promise<void> {
+  return new Promise(res => setTimeout(res, ms))
+}
 
 const Container = styled.div`
   min-height: 100vh;
@@ -10,7 +15,7 @@ const Container = styled.div`
   flex-direction: column;
 `
 
-const Ball = styled.div`
+const Ball = styled.div<{ shaking: boolean }>`
   background: black;
   height: 350px;
   width: 350px;
@@ -26,6 +31,20 @@ const Ball = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+
+  animation: ${({ shaking }) =>
+    shaking
+      ? css`
+          ${shake} 1000ms
+        `
+      : "none"};
+`
+
+const shake = keyframes`
+ 10%, 90% { transform: translateX(-2px); }
+ 20%, 80% { transform: translateX(4px); }
+ 30%, 50%, 70% { transform: translateX(-8px); }
+ 40%, 60% { transform: translateX(8px); }
 `
 
 const Display = styled.div`
@@ -57,7 +76,7 @@ const Caption = styled.div`
   font-size: 30px;
   margin-bottom: 10px;
   color: palevioletred;
-  margin-bottom: 10px;
+  margin-bottom: 15px;
 `
 
 const Button = styled.button<{ disabled: boolean }>`
@@ -72,11 +91,22 @@ const Button = styled.button<{ disabled: boolean }>`
 
 type State = {
   answer: string
+  answering: boolean
 }
 
 class App extends React.Component {
   state: State = {
     answer: "Shake me",
+    answering: false,
+  }
+
+  getAnswer = async () => {
+    this.setState({ answering: true })
+
+    // Wait atleast 1 second before showing the answer (pretend like the ball is thinking)
+    const [answer] = await Promise.all([getAnswer(), wait(1000)])
+
+    this.setState({ answer, answering: false })
   }
 
   render() {
@@ -85,18 +115,18 @@ class App extends React.Component {
         <Title>Magic 🎱 Ball</Title>
         <Caption>Ask a question then shake the ball.</Caption>
 
-        <Ball>
+        <Ball shaking={this.state.answering}>
           <Display>
-            <Answer>{this.state.answer}</Answer>
+            <Spring
+              from={{ opacity: 1 }}
+              to={{ opacity: this.state.answering ? 0 : 1 }}
+            >
+              {style => <Answer style={style}>{this.state.answer}</Answer>}
+            </Spring>
           </Display>
         </Ball>
 
-        <Button
-          disabled={false}
-          onClick={() => {
-            getAnswer().then(answer => this.setState({ answer }))
-          }}
-        >
+        <Button disabled={this.state.answering} onClick={this.getAnswer}>
           Shake
         </Button>
       </Container>
